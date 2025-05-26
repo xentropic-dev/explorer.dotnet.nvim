@@ -5,24 +5,25 @@ describe("solution_parser", function()
     local solution_parser = require("solution_parser")
     assert.is_not_nil(solution_parser)
   end)
-end)
-describe("some basics", function()
-  local bello = function(boo)
-    return "bello " .. boo
-  end
 
-  local bounter
+  it("can parse version number", function()
+    local given_sln = [[
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+]]
+    local solution_parser = require("solution_parser")
+    local header = solution_parser._parse_solution_header(vim.split(given_sln, "\n"))
 
-  before_each(function()
-    bounter = 0
-  end)
+    assert.is_not_nil(header)
 
-  it("some test", function()
-    bounter = 100
-    assert.equals("bello Brian", bello("Brian"))
-  end)
+    local expected = {
+      visual_studio_version = "17.0.31903.59",
+      file_version = "12.00",
+      minimum_visual_studio_version = "10.0.40219.1",
+    }
 
-  it("some other test", function()
-    assert.equals(0, bounter)
+    assert.are.same(expected, header)
   end)
 end)
