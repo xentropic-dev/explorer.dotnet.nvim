@@ -27,6 +27,33 @@ local PROJECT_TYPES = {
 -- Solution folder GUID
 local SOLUTION_FOLDER_GUID = "2150E333-8FDC-42A3-9474-1A3956D46DE8"
 
+---@class dotnet_explorer.Project
+---@field type_guid string The project type GUID
+---@field name string The project name
+---@field path string The relative path to the project file
+---@field guid string The unique project GUID
+---@field type_name string|nil The human-readable project type name
+---@field is_solution_folder boolean Whether this is a solution folder
+local Project = {}
+Project.__index = Project
+
+--- Creates a new Project instance
+---@param type_guid string The project type GUID
+---@param name string The project name
+---@param path string The relative path to the project file
+---@param guid string The unique project GUID
+---@return dotnet_explorer.Project
+function Project.new(type_guid, name, path, guid)
+  local self = setmetatable({}, Project)
+  self.type_guid = type_guid
+  self.name = name
+  self.path = path
+  self.guid = guid
+  self.type_name = PROJECT_TYPES[type_guid]
+  self.is_solution_folder = type_guid == SOLUTION_FOLDER_GUID
+  return self
+end
+
 ---@class dotnet_explorer.SolutionHeader
 ---@fields visual_studio_version string|nil The Visual Studio version.
 ---@fields file_version string|nil The solution file format version.
@@ -64,6 +91,27 @@ function M._parse_solution_header(lines)
   end
 
   return header
+end
+
+--- Parses project information from solution file lines
+---@param lines string[] The lines of the solution file
+---@return dotnet_explorer.Project[] Array of parsed projects
+function M._parse_projects(lines)
+  local projects = {}
+
+  for _, line in ipairs(lines) do
+    -- Match the Project line pattern:
+    -- Project("{GUID}") = "Name", "Path", "{GUID}"
+    local type_guid, name, path, project_guid =
+      line:match('^Project%("({[^}]+})")%) = "([^"]+)", "([^"]+)", "({[^}]+})"')
+
+    if type_guid and name and path and project_guid then
+      local project = Project.new(type_guid, name, path, project_guid)
+      table.insert(projects, project)
+    end
+  end
+
+  return projects
 end
 
 return M
