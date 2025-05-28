@@ -102,10 +102,14 @@ function M._parse_projects(lines)
   for _, line in ipairs(lines) do
     -- Match the Project line pattern:
     -- Project("{GUID}") = "Name", "Path", "{GUID}"
-    local type_guid, name, path, project_guid =
-      line:match('^Project%("({[^}]+})")%) = "([^"]+)", "([^"]+)", "({[^}]+})"')
+    if string.match(line, "^Project%(") then
+      local type_guid, name, path, project_guid =
+        string.match(line, 'Project%("({[^}]+})"%)%s*=%s*"([^"]+)",%s*"([^"]+)",%s*"({[^}]+})"')
 
-    if type_guid and name and path and project_guid then
+      if type_guid then
+        type_guid = type_guid:sub(2, -2) -- Remove first and last character (the braces)
+        project_guid = project_guid:sub(2, -2)
+      end
       local project = Project.new(type_guid, name, path, project_guid)
       table.insert(projects, project)
     end
