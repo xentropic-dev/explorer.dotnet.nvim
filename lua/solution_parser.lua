@@ -2,6 +2,65 @@ local M = {}
 
 local project_types = require("project_types")
 
+---@class dotnet_explorer.Solution
+---@field path string The absolute path to the solution file
+---@field header dotnet_explorer.SolutionHeader The parsed solution header information
+---@field projects_by_guid table<string, dotnet_explorer.Project> A map of project GUIDs to Project objects
+local Solution = {}
+Solution.__index = Solution
+
+--- Creates a new Solution instance
+---@param path string The absolute path to the solution file
+---@param header dotnet_explorer.SolutionHeader|nil The parsed solution header information
+---@return dotnet_explorer.Solution
+function Solution.new(path, header)
+  local self = setmetatable({}, Solution)
+  self.path = path
+  self.header = header
+    or {
+      visual_studio_version = nil,
+      file_version = nil,
+      minimum_visual_studio_version = nil,
+    }
+  self.projects_by_guid = {}
+  return self
+end
+
+--- Adds a project to the solution
+---@param project dotnet_explorer.Project The project to add
+function Solution:add_project(project)
+  if not project or not project.guid then
+    error("Invalid project: must have a valid GUID")
+  end
+  self.projects_by_guid[project.guid] = project
+end
+
+--- Parses a solution file and returns a Solution object
+---@param filepath string The absolute path to the solution file
+---@return dotnet_explorer.Solution
+function M.parse_solution(filepath)
+  local file = io.open(filepath, "r")
+  if not file then
+    error("Could not open solution file: " .. filepath)
+  end
+
+  local lines = {}
+  for line in file:lines() do
+    table.insert(lines, line)
+  end
+
+  file:close()
+
+  local header = M._parse_solution_header(lines)
+  local solution = Solution.new(filepath, header)
+  local projects = M._parse_projects(lines)
+  for _, project in ipairs(projects) do
+    solution:add_project(project)
+  end
+
+  return solution
+end
+
 ---@class dotnet_explorer.Project
 ---@field type_guid string The project type GUID
 ---@field name string The project name
