@@ -152,4 +152,24 @@ function M._parse_projects(lines)
   return projects
 end
 
+--- Parses the NestedProjects section of a solution file
+---@param lines string[] The lines of the solution file
+---@return table<string, string> A map of project GUIDs to their parent GUIDs
+function M._parse_nested_projects(lines)
+  local nested_projects = {}
+
+  for _, line in ipairs(lines) do
+    -- Match the NestedProjects line pattern:
+    -- {ChildGUID} = {ParentGUID}
+    local child_guid, parent_guid = string.match(line, "^[ \t]*(%b{})%s*=%s*(%b{})$")
+    if parent_guid and child_guid then
+      parent_guid = parent_guid:sub(2, -2) -- Remove first and last character (the braces)
+      child_guid = child_guid:sub(2, -2)
+      nested_projects[child_guid] = parent_guid
+    end
+  end
+
+  return nested_projects
+end
+
 return M

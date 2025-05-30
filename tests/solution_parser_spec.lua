@@ -112,4 +112,26 @@ EndProject
       solution_parser.parse_solution("non_existent.sln")
     end, "Could not open solution file: non_existent.sln")
   end)
+
+  it("should correctly parse nested projects", function()
+    local given_sln = [[
+{C7E89A3E-A631-4760-8D61-BD1EAB1C4E69} = {6ED356A7-8B47-4613-AD01-C85CF28491BD}
+		{DEFF4009-1FAB-4392-80B6-707E2DC5C00B} = {664D406C-2F83-48F0-BFC3-408D5CB53C65}
+]]
+    local parent_projects_by_child_guid = solution_parser._parse_nested_projects(vim.split(given_sln, "\n"))
+    assert.is_not_nil(parent_projects_by_child_guid)
+
+    assert.is_not_nil(parent_projects_by_child_guid["C7E89A3E-A631-4760-8D61-BD1EAB1C4E69"])
+    assert.is_not_nil(parent_projects_by_child_guid["DEFF4009-1FAB-4392-80B6-707E2DC5C00B"])
+
+    assert.is_equal(
+      parent_projects_by_child_guid["C7E89A3E-A631-4760-8D61-BD1EAB1C4E69"],
+      "6ED356A7-8B47-4613-AD01-C85CF28491BD"
+    )
+
+    assert.is_equal(
+      parent_projects_by_child_guid["DEFF4009-1FAB-4392-80B6-707E2DC5C00B"],
+      "664D406C-2F83-48F0-BFC3-408D5CB53C65"
+    )
+  end)
 end)
