@@ -1,4 +1,5 @@
 local node_module = require("tree.node")
+local strings = require("plenary.strings")
 local M = {}
 
 -- Check if nvim-web-devicons is available
@@ -46,12 +47,13 @@ end
 -- Renders a tree directly to a buffer with colored icons
 ---@param buf_id number The buffer ID to render to
 ---@param tree dotnet_explorer.TreeNode The tree to render
----@param opts? table Optional configuration { namespace_id?: number, clear_buffer?: boolean }
+---@param opts? table Optional configuration { namespace_id?: number, clear_buffer?: boolean, window_width?: number }
 ---@return number namespace_id The namespace ID used for highlights
 function M.render_tree(buf_id, tree, opts)
   opts = opts or {}
   local namespace_id = opts.namespace_id or vim.api.nvim_create_namespace("dotnet_explorer_tree")
   local clear_buffer = opts.clear_buffer ~= false -- default to true
+  local window_width = opts.window_width or vim.api.nvim_win_get_width(0)
 
   local lines = {}
   local highlights = {}
@@ -85,6 +87,11 @@ function M.render_tree(buf_id, tree, opts)
     end
 
     local line_text = indent_str .. expand_icon .. " " .. icon .. " " .. node.name
+    -- Truncate line if it's too long for the window
+    local display_width = vim.fn.strdisplaywidth(line_text)
+    if display_width > window_width - 4 then
+      line_text = strings.truncate(line_text, window_width - 4, nil, nil)
+    end
     local line_num = #lines
 
     table.insert(lines, line_text)

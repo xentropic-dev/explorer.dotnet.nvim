@@ -24,6 +24,28 @@ feedback, please open an issue or a pull request.
 
 ![Screenshot of the C# development tree view in Neovim](wip.png)
 
+# Usage
+
+Here's the recommended way to setup this plugin with Lazy.
+
+```lua
+return {
+  "xentropic-dev/nvim-dotnet-explorer",
+	config = function()
+		require("dotnet_explorer").setup({
+			renderer = {
+				width = 40,
+				side = "right",
+			},
+		})
+	end,
+	keys = {
+		{ "<leader>ee", "<cmd>ToggleSolutionExplorer<cr>", desc = "Toggle Solution Explorer" },
+	},
+}
+
+```
+
 # Roadmap
 
 The goal is to eventually have as much of the functionality of Visual Studio
