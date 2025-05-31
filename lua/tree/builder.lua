@@ -9,14 +9,14 @@ local M = {}
 ---@return dotnet_explorer.TreeNode
 function M.build_tree(solution)
   -- Create root solution node
-  local path = vim.fn.fnamemodify(solution.path, ":p")
+  local path = vim.fn.fnamemodify(solution.path, ":t")
   local root = TreeNode:new(NodeType.SOLUTION, path, solution.path)
 
   -- First pass: Create all project nodes
   local project_nodes = {}
   for guid, project in pairs(solution.projects_by_guid) do
     local node_type = NodeType.PROJECT
-    if project.type_guid == PROJECT_TYPES.SOLUTION_FOLDER then
+    if project.type_name == PROJECT_TYPES.SOLUTION_FOLDER then
       node_type = NodeType.SOLUTION_FOLDER
     end
     local project_node = TreeNode:new(node_type, project.name, project.path, guid)

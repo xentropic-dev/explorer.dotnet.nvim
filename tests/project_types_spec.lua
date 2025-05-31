@@ -4,7 +4,7 @@ describe("project_types", function()
   local project_types
 
   before_each(function()
-    project_types = require("solution/project_types")
+    project_types = require("solution.project_types")
   end)
 
   it("can be required", function()
