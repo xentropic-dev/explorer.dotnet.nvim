@@ -39,7 +39,7 @@ EndProject
     local project = projects[1]
     assert.are.equal("9A19103F-16F7-4668-BE54-9A1E7A4F7556", project.type_guid)
     assert.are.equal("Domain", project.name)
-    assert.are.equal("src\\Domain\\Domain.csproj", project.path)
+    assert.are.equal("src/Domain/Domain.csproj", project.path)
     assert.are.equal("C7E89A3E-A631-4760-8D61-BD1EAB1C4E69", project.guid)
     assert.is_false(project.is_solution_folder)
   end)
