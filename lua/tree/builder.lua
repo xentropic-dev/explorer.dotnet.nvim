@@ -101,14 +101,81 @@ function M.populate_project_files(project_node)
   if not project_node.path then
     return
   end
-  --local project_dir = require("path").dirname(project_node.path)
-  --M.add_directory_contents(project_node, project_dir)
+
+  -- only all NodeType.PROJECT nodes to populate file tree
+  if project_node.type ~= NodeType.PROJECT then
+    return
+  end
+
+  local project_dir = vim.fn.fnamemodify(project_node.path, ":p:h")
+  M.add_directory_contents(project_node, project_dir)
 end
 
 ---@param parent_node dotnet_explorer.TreeNode
 ---@param dir_path string
 function M.add_directory_contents(parent_node, dir_path)
-  -- Implementation here...
+  -- Check if directory exists and is readable
+  local stat = vim.loop.fs_stat(dir_path)
+  if not stat or stat.type ~= "directory" then
+    return
+  end
+
+  -- Get directory contents
+  local handle = vim.loop.fs_scandir(dir_path)
+  if not handle then
+    return
+  end
+
+  local entries = {}
+
+  -- Collect all entries
+  while true do
+    local name, type = vim.loop.fs_scandir_next(handle)
+    if not name then
+      break
+    end
+
+    -- Skip hidden files and common ignore patterns
+    if
+      not name:match("^%.")
+      and not name:match("%.sln$")
+      and not name:match("%.csproj$")
+      and name ~= "bin"
+      and name ~= "obj"
+      and name ~= "node_modules"
+      and name ~= ".vs"
+      and name ~= ".vscode"
+    then
+      table.insert(entries, { name = name, type = type })
+    end
+  end
+
+  -- Sort entries: directories first, then files, both alphabetically
+  table.sort(entries, function(a, b)
+    if a.type == b.type then
+      return a.name < b.name
+    end
+    -- Directories come before files
+    return a.type == "directory"
+  end)
+
+  -- Create nodes for each entry
+  for _, entry in ipairs(entries) do
+    local full_path = dir_path .. "/" .. entry.name
+    local node_type = NodeType.FILE
+
+    if entry.type == "directory" then
+      node_type = NodeType.FOLDER
+    end
+
+    local child_node = TreeNode:new(node_type, entry.name, full_path)
+    parent_node:add_child(child_node)
+
+    -- Recursively add contents for directories
+    if entry.type == "directory" then
+      M.add_directory_contents(child_node, full_path)
+    end
+  end
 end
 
 return M

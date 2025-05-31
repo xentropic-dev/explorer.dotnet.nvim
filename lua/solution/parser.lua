@@ -11,7 +11,7 @@ local Solution = {}
 Solution.__index = Solution
 
 --- Creates a new Solution instance
----@param path string The absolute path to the solution file
+---@param path string The relative path to the solution file
 ---@param header dotnet_explorer.SolutionHeader|nil The parsed solution header information
 ---@return dotnet_explorer.Solution
 function Solution.new(path, header)
@@ -72,7 +72,7 @@ end
 ---@class dotnet_explorer.Project
 ---@field type_guid string The project type GUID
 ---@field name string The project name
----@field path string The relative path to the project file
+---@field path string The relative normalized path to the project file
 ---@field guid string The unique project GUID
 ---@field type_name string|nil The human-readable project type name
 ---@field is_solution_folder boolean Whether this is a solution folder
@@ -82,7 +82,7 @@ Project.__index = Project
 --- Creates a new Project instance
 ---@param type_guid string The project type GUID
 ---@param name string The project name
----@param path string The relative path to the project file
+---@param path string The relative normalized path to the project file
 ---@param guid string The unique project GUID
 ---@return dotnet_explorer.Project
 function Project.new(type_guid, name, path, guid)
@@ -152,7 +152,8 @@ function M._parse_projects(lines)
         type_guid = type_guid:sub(2, -2) -- Remove first and last character (the braces)
         project_guid = project_guid:sub(2, -2)
       end
-      local project = Project.new(type_guid, name, path, project_guid)
+      local normalized_path = path:gsub("\\", "/") -- Normalize path to use forward slashes
+      local project = Project.new(type_guid, name, normalized_path, project_guid)
       table.insert(projects, project)
     end
   end
