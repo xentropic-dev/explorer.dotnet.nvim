@@ -1,3 +1,29 @@
+# Neovim C# Development
+
+C# is a powerful language, and Neovim is a powerful editor. This project is
+part of a series of plugins that aim to bring the best of C# development to
+Neovim, making it a viable alternative to traditional IDEs like Visual Studio
+and Rider.
+
+# Work in Progress
+
+This project is a work in progress. It is not yet ready for production use, but
+you can try it out and contribute to its development. The goal is to provide a
+complete C# development experience in Neovim.
+
+Stay tuned for updates and new features. If you have any suggestions or
+feedback, please open an issue or a pull request.
+
+# Existing Features
+
+- [x] Solution file parser for loading nested projects
+- [x] Project tree builder
+- [x] Partially complete tree renderer
+
+# Screenshot
+
+![Screenshot of the C# development tree view in Neovim](wip.png)
+
 # Roadmap
 
 The goal is to eventually have as much of the functionality of Visual Studio
