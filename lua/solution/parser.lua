@@ -1,6 +1,6 @@
 local M = {}
 
-local project_types = require("project_types")
+local project_types = require("solution.project_types")
 
 ---@class dotnet_explorer.Solution
 ---@field path string The absolute path to the solution file

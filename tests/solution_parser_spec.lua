@@ -1,7 +1,7 @@
 ---@diagnostic disable: undefined-field
 ---
 describe("solution_parser", function()
-  local solution_parser = require("solution_parser")
+  local solution_parser = require("solution.parser")
   it("can be required", function()
     assert.is_not_nil(solution_parser)
   end)
@@ -59,7 +59,7 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application.UnitTests", "tests\Application.UnitTests\Application.UnitTests.csproj", "{DEFF4009-1FAB-4392-80B6-707E2DC5C00B}"
 EndProject
 ]]
-    local project_types = require("project_types")
+    local project_types = require("solution.project_types")
     local projects = solution_parser._parse_projects(vim.split(given_sln, "\n"))
 
     assert.is_not_nil(projects)
