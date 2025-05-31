@@ -6,6 +6,7 @@ local project_types = require("project_types")
 ---@field path string The absolute path to the solution file
 ---@field header dotnet_explorer.SolutionHeader The parsed solution header information
 ---@field projects_by_guid table<string, dotnet_explorer.Project> A map of project GUIDs to Project objects
+---@field nested_projects table<string, string> A map of child project GUIDs to their parent project GUIDs
 local Solution = {}
 Solution.__index = Solution
 
@@ -23,6 +24,7 @@ function Solution.new(path, header)
       minimum_visual_studio_version = nil,
     }
   self.projects_by_guid = {}
+  self.nested_projects = {}
   return self
 end
 
@@ -57,6 +59,12 @@ function M.parse_solution(filepath)
   for _, project in ipairs(projects) do
     solution:add_project(project)
   end
+
+  local global_section = M._parse_global(lines)
+  local nested_project_section = M._parse_global_section(global_section, "NestedProjects")
+  local nested_projects = M._parse_nested_projects(nested_project_section)
+
+  solution.nested_projects = nested_projects
 
   return solution
 end
@@ -170,6 +178,57 @@ function M._parse_nested_projects(lines)
   end
 
   return nested_projects
+end
+
+--- Parses a specific GlobalSection from the solution file
+---@param lines string[] The lines of the solution file
+---@param section_name string The name of the section to parse (e.g., "NestedProjects")
+---@return string[] The lines of the specified section, trimmed of leading/trailing whitespace
+function M._parse_global_section(lines, section_name)
+  local section = {}
+  local in_section = false
+  local section_start_pattern = "^[ \t]*GlobalSection%(" .. section_name .. "%)"
+  local section_end_pattern = "^[ \t]*EndGlobalSection"
+
+  -- Find the section start
+  for _, line in ipairs(lines) do
+    if not in_section then
+      if string.match(line, section_start_pattern) then
+        in_section = true
+      end
+    else
+      if string.match(line, section_end_pattern) then
+        break -- End of the section
+      else
+        section[#section + 1] = line
+      end
+    end
+  end
+  return section
+end
+
+--- Parses Global..EndGlobal contents from the solution file
+---@param lines string[] The lines of the solution file
+---@return string[] The contents of the Global section, excluding the header and footer
+function M._parse_global(lines)
+  local global_section = {}
+  local in_global = false
+
+  for _, line in ipairs(lines) do
+    if not in_global then
+      if string.match(line, "^[ \t]*Global%s*$") then
+        in_global = true
+      end
+    else
+      if string.match(line, "^[ \t]*EndGlobal%s*$") then
+        break -- End of the Global section
+      else
+        global_section[#global_section + 1] = line:match("^%s*(.-)%s*$") -- Trim whitespace
+      end
+    end
+  end
+
+  return global_section
 end
 
 return M
