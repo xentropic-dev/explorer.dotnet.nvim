@@ -69,7 +69,7 @@ function M.render_tree(buf_id, tree, opts)
 
     local indent_str = string.rep("  ", indent)
 
-    local is_open = true
+    local is_open = node.expanded == true
 
     local expand_icon = " "
 
@@ -119,17 +119,19 @@ function M.render_tree(buf_id, tree, opts)
       end_col = chevron_end,
     })
 
-    -- Sort children by name
-    local sorted_children = {}
-    for _, child in ipairs(node.children) do
-      table.insert(sorted_children, child)
-    end
-    table.sort(sorted_children, function(a, b)
-      return a.name < b.name
-    end)
+    if is_open then
+      -- Sort children by name
+      local sorted_children = {}
+      for _, child in ipairs(node.children) do
+        table.insert(sorted_children, child)
+      end
+      table.sort(sorted_children, function(a, b)
+        return a.name < b.name
+      end)
 
-    for _, child in ipairs(sorted_children) do
-      build_node(child, indent + 1)
+      for _, child in ipairs(sorted_children) do
+        build_node(child, indent + 1)
+      end
     end
   end
 

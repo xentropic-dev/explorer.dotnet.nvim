@@ -80,6 +80,17 @@ function M.build_tree(solution)
     M.populate_project_files(project_node)
   end
 
+  -- Expand the root node and solution folders by default
+  root.expanded = true
+  
+  -- Expand solution folders by default
+  for _, guid in ipairs(sorted_guids) do
+    local project_node = project_nodes[guid]
+    if project_node.type == NodeType.SOLUTION_FOLDER then
+      project_node.expanded = true
+    end
+  end
+  
   return root
 end
 
