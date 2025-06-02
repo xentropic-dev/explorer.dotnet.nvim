@@ -17,6 +17,7 @@ M.NodeType = {
 ---@field children dotnet_explorer.TreeNode[]
 ---@field parent dotnet_explorer.TreeNode?
 ---@field metadata table?
+---@field expanded boolean? Whether the node is expanded in the UI
 M.TreeNode = {}
 M.TreeNode.__index = M.TreeNode
 
@@ -29,6 +30,7 @@ function M.TreeNode:new(node_type, name, path, guid)
     children = {},
     parent = nil,
     metadata = {},
+    expanded = false, -- Default to not expanded
   }
   setmetatable(node, self)
   return node
