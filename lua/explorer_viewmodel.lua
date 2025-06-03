@@ -30,21 +30,21 @@ end
 ---@return boolean success Whether the solution was loaded successfully
 function ExplorerViewModel:load_solution(solution_path)
   self.solution_path = solution_path
-  
+
   -- Parse the solution file
   local solution = solution_parser.parse_solution(solution_path)
   if not solution then
     return false
   end
-  
+
   self.solution = solution
-  
+
   -- Build the tree
   self.tree = tree_builder.build_tree(solution)
-  
+
   -- Set the root node as selected by default
   self.selected_node = self.tree
-  
+
   return true
 end
 
@@ -55,18 +55,18 @@ function ExplorerViewModel:get_node_at_line(line_number)
   if not self.tree then
     return nil
   end
-  
+
   local current_line = 0
-  
+
   local function traverse(node)
     -- Check if this is the node we're looking for
     if current_line == line_number then
       return node
     end
-    
+
     -- Move to the next line
     current_line = current_line + 1
-    
+
     -- If the node is expanded, check its children
     if node.expanded then
       -- Sort children by name to match the renderer's sorting
@@ -77,7 +77,7 @@ function ExplorerViewModel:get_node_at_line(line_number)
       table.sort(sorted_children, function(a, b)
         return a.name < b.name
       end)
-      
+
       -- Traverse sorted children
       for _, child in ipairs(sorted_children) do
         local result = traverse(child)
@@ -86,10 +86,10 @@ function ExplorerViewModel:get_node_at_line(line_number)
         end
       end
     end
-    
+
     return nil
   end
-  
+
   return traverse(self.tree)
 end
 
@@ -106,27 +106,38 @@ end
 ---@return boolean changed Whether the tree state changed
 function ExplorerViewModel:toggle_node_at_line(line_number)
   local node = self:get_node_at_line(line_number)
-  
+
   -- Debug output to help diagnose issues
   if node then
-    vim.notify("Node found at line " .. line_number .. ": " .. node.name .. " (type: " .. node.type .. ")", vim.log.levels.INFO)
+    vim.notify(
+      "Node found at line " .. line_number .. ": " .. node.name .. " (type: " .. node.type .. ")",
+      vim.log.levels.INFO
+    )
   else
     vim.notify("No node found at line " .. line_number, vim.log.levels.WARN)
     return false
   end
-  
+
   -- Check if the node is a container type that can be expanded/collapsed
-  if node and (node.type == NodeType.FOLDER or 
-               node.type == NodeType.SOLUTION_FOLDER or 
-               node.type == NodeType.SOLUTION or 
-               node.type == NodeType.PROJECT) then
-    
+  if
+    node
+    and (
+      node.type == NodeType.FOLDER
+      or (node.type == NodeType.FILE and #node.children > 0)
+      or node.type == NodeType.SOLUTION_FOLDER
+      or node.type == NodeType.SOLUTION
+      or node.type == NodeType.PROJECT
+    )
+  then
     -- Toggle the expanded state
     node.expanded = not node.expanded
-    vim.notify("Toggled node " .. node.name .. " to " .. (node.expanded and "expanded" or "collapsed"), vim.log.levels.INFO)
+    vim.notify(
+      "Toggled node " .. node.name .. " to " .. (node.expanded and "expanded" or "collapsed"),
+      vim.log.levels.INFO
+    )
     return true
   end
-  
+
   return false
 end
 
@@ -151,24 +162,26 @@ function ExplorerViewModel:activate_node_at_line(line_number)
   if not node then
     return false, nil
   end
-  
+
   -- Select the node
   self.selected_node = node
-  
+
   -- If it's a folder or project, toggle expansion
-  if node.type == NodeType.FOLDER or 
-     node.type == NodeType.SOLUTION_FOLDER or 
-     node.type == NodeType.SOLUTION or 
-     node.type == NodeType.PROJECT then
+  if
+    node.type == NodeType.FOLDER
+    or node.type == NodeType.SOLUTION_FOLDER
+    or node.type == NodeType.SOLUTION
+    or node.type == NodeType.PROJECT
+  then
     self:toggle_node(node)
     return true, nil
   end
-  
+
   -- If it's a file, return the path to open
   if node.type == NodeType.FILE then
     return true, node.path
   end
-  
+
   return false, nil
 end
 
@@ -186,4 +199,3 @@ function instance:set_tree(tree)
 end
 
 return instance
-

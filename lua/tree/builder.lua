@@ -82,7 +82,7 @@ function M.build_tree(solution)
 
   -- Expand the root node and solution folders by default
   root.expanded = true
-  
+
   -- Expand solution folders by default
   for _, guid in ipairs(sorted_guids) do
     local project_node = project_nodes[guid]
@@ -90,7 +90,7 @@ function M.build_tree(solution)
       project_node.expanded = true
     end
   end
-  
+
   return root
 end
 
@@ -120,6 +120,76 @@ function M.populate_project_files(project_node)
 
   local project_dir = vim.fn.fnamemodify(project_node.path, ":p:h")
   M.add_directory_contents(project_node, project_dir)
+end
+
+---@param node dotnet_explorer.TreeNode
+function M.nest_code_behind_files(node)
+  if not node.children or #node.children == 0 then
+    return
+  end
+
+  for _, child in ipairs(node.children) do
+    --- Check if type is FILE
+    if child.type ~= NodeType.FILE then
+      -- Only process files, skip directories and other types
+      goto continue
+    end
+
+    -- Check if child was already removed
+    if not child then
+      goto continue
+    end
+
+    local base_name = nil
+    -- Handle special case appsettings.X.json files
+    if child.name:match("^appsettings%.") and child.name ~= "appsettings.json" then
+      base_name = "appsettings.json"
+    end
+
+    --- split filename on period
+    if not base_name then
+      local parts = vim.split(child.name, "%.")
+      if #parts < 2 then
+        -- code behind files extend a file with an additional extension
+        -- ie: MyPage.razor and MyPage.razor.cs
+        -- so we only nest if there are at least 3 parts
+        goto continue
+      end
+
+      base_name = table.concat(parts, ".", 1, #parts - 1)
+    end
+
+    -- search for node that matches the base name and is not the same as the current node
+    local code_behind_node = nil
+    for _, sibling in ipairs(node.children) do
+      if sibling.name == base_name and sibling ~= child then
+        code_behind_node = sibling
+        break
+      end
+    end
+
+    if not code_behind_node then
+      -- no matching code behind file found, continue to next child
+      goto continue
+    end
+
+    -- If we found a code behind file, nest it under the main file
+    if code_behind_node.type ~= NodeType.FILE then
+      goto continue
+    end
+
+    local parent_node = child.parent
+
+    vim.notify("Removing child from parent node: " .. parent_node.name, vim.log.levels.DEBUG)
+    if parent_node ~= nil then
+      vim.notify("Removing child from parent node: " .. parent_node.name, vim.log.levels.DEBUG)
+      parent_node:remove_child(child)
+    end
+
+    code_behind_node:add_child(child)
+
+    ::continue::
+  end
 end
 
 ---@param parent_node dotnet_explorer.TreeNode
@@ -187,6 +257,9 @@ function M.add_directory_contents(parent_node, dir_path)
       M.add_directory_contents(child_node, full_path)
     end
   end
+
+  -- Code behind nesting
+  M.nest_code_behind_files(parent_node)
 end
 
 return M

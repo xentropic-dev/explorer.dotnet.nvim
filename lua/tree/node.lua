@@ -42,6 +42,17 @@ function M.TreeNode:add_child(child)
   return child
 end
 
+function M.TreeNode:remove_child(child)
+  for i, c in ipairs(self.children) do
+    if c == child then
+      table.remove(self.children, i)
+      child.parent = nil
+      return true
+    end
+  end
+  return false
+end
+
 function M.TreeNode:find_child_by_guid(guid)
   for _, child in ipairs(self.children) do
     if child.guid == guid then

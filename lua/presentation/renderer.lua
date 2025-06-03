@@ -78,6 +78,7 @@ function M.render_tree(buf_id, tree, opts)
       or node.type == node_module.NodeType.SOLUTION_FOLDER
       or node.type == node_module.NodeType.SOLUTION
       or node.type == node_module.NodeType.PROJECT
+      or #node.children > 0
     then
       if not is_open then
         expand_icon = ""
