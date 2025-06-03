@@ -58,13 +58,13 @@ shortcuts.
 
 Tree view components:
 
-- [ ] file tree
-- [ ] file icons
-- [ ] code behind grouping
-  - [ ] razor, razor.cs, razor.css, razor.js etc.
-  - [ ] appsettings.json, appsettings.Development.json, etc.
-- [ ] expand/collapse folders
-- [ ] controls to open/close files
+- [x] file tree
+- [x] file icons
+- [x] code behind grouping
+  - [x] razor, razor.cs, razor.css, razor.js etc.
+  - [x] appsettings.json, appsettings.Development.json, etc.
+- [x] expand/collapse folders
+- [x] controls to open/close files
 - [ ] Special c# icons
   - [ ] Properties
   - [ ] wwwroot
