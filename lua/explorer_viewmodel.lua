@@ -131,10 +131,6 @@ function ExplorerViewModel:toggle_node_at_line(line_number)
   then
     -- Toggle the expanded state
     node.expanded = not node.expanded
-    vim.notify(
-      "Toggled node " .. node.name .. " to " .. (node.expanded and "expanded" or "collapsed"),
-      vim.log.levels.INFO
-    )
     return true
   end
 
@@ -173,6 +169,12 @@ function ExplorerViewModel:activate_node_at_line(line_number)
     or node.type == NodeType.SOLUTION
     or node.type == NodeType.PROJECT
   then
+    self:toggle_node(node)
+    return true, nil
+  end
+
+  -- if it's a file with children and isn't already expanded, toggle it
+  if node.type == NodeType.FILE and #node.children > 0 and not node.expanded then
     self:toggle_node(node)
     return true, nil
   end

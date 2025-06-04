@@ -5,12 +5,12 @@ local M = {}
 ---@param bufnr number: The buffer number to attach the key mappings to
 function M.on_attach(bufnr)
   local view = require("explorer_view").get_instance()
-  
+
   -- Toggle node expansion with Enter
   vim.keymap.set("n", "<CR>", function()
     local line = vim.api.nvim_win_get_cursor(0)[1] - 1 -- Convert to 0-based
     local changed, file_path = viewmodel:activate_node_at_line(line)
-    
+
     if changed then
       -- If a file path was returned, open the file
       if file_path then
@@ -22,20 +22,12 @@ function M.on_attach(bufnr)
       end
     end
   end, { buffer = bufnr, noremap = true, silent = true })
-  
-  -- Toggle node expansion with space
-  vim.keymap.set("n", "<Space>", function()
-    local line = vim.api.nvim_win_get_cursor(0)[1] - 1 -- Convert to 0-based
-    if viewmodel:toggle_node_at_line(line) then
-      view:render()
-    end
-  end, { buffer = bufnr, noremap = true, silent = true })
-  
+
   -- Close explorer with q
   vim.keymap.set("n", "q", function()
     view:close()
   end, { buffer = bufnr, noremap = true, silent = true })
-  
+
   -- Refresh explorer with r
   vim.keymap.set("n", "r", function()
     if viewmodel.solution_path then
