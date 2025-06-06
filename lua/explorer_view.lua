@@ -158,7 +158,7 @@ end
 local instance = nil
 
 ---Gets the singleton instance of ExplorerView
----@param config table|nil Configuration options
+---@param config table Configuration options
 ---@return ExplorerView
 local function get_instance(config)
   if not instance then
