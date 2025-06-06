@@ -1,15 +1,15 @@
 -- explorer_viewmodel.lua
 -- Represents the state of the tree and persists between buffer open/close
-
+require("tree.node")
 local solution_parser = require("solution").Parser
 local tree_builder = require("tree.builder")
 local node_module = require("tree.node")
 local NodeType = node_module.NodeType
 
 ---@class ExplorerViewModel
----@field solution dotnet_explorer.Solution The parsed solution
----@field tree dotnet_explorer.TreeNode The tree representation of the solution
----@field selected_node dotnet_explorer.TreeNode|nil The currently selected node
+---@field solution Solution The parsed solution
+---@field tree TreeNode The tree representation of the solution
+---@field selected_node TreeNode|nil The currently selected node
 ---@field solution_path string|nil Path to the solution file
 local ExplorerViewModel = {}
 ExplorerViewModel.__index = ExplorerViewModel
@@ -50,7 +50,7 @@ end
 
 ---Finds a node at a specific line in the rendered tree
 ---@param line_number number The line number (0-based)
----@return dotnet_explorer.TreeNode|nil node The node at the line, or nil if not found
+---@return TreeNode|nil node The node at the line, or nil if not found
 function ExplorerViewModel:get_node_at_line(line_number)
   if not self.tree then
     return nil
@@ -94,7 +94,7 @@ function ExplorerViewModel:get_node_at_line(line_number)
 end
 
 ---Toggles the expanded state of a node
----@param node dotnet_explorer.TreeNode The node to toggle
+---@param node TreeNode The node to toggle
 function ExplorerViewModel:toggle_node(node)
   if node then
     node.expanded = not node.expanded

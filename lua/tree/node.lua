@@ -1,6 +1,7 @@
+---@meta
 local M = {}
 
----@enum dotnet_explorer.NodeType
+---@enum NodeType
 M.NodeType = {
   SOLUTION = "solution", -- The root node representing the solution
   PROJECT = "project", -- A project node within the solution
@@ -9,13 +10,13 @@ M.NodeType = {
   FILE = "file", -- A file node, which can be a source file or other file type
 }
 
----@class dotnet_explorer.TreeNode
----@field type dotnet_explorer.NodeType
+---@class TreeNode
+---@field type NodeType
 ---@field name string
 ---@field path string?
 ---@field guid string?
----@field children dotnet_explorer.TreeNode[]
----@field parent dotnet_explorer.TreeNode?
+---@field children TreeNode[]
+---@field parent TreeNode?
 ---@field metadata table?
 ---@field expanded boolean? Whether the node is expanded in the UI
 M.TreeNode = {}
