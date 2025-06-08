@@ -39,3 +39,8 @@ function Solution:add_project(project)
   end
   self.projects_by_guid[project.guid] = project
 end
+
+local M = {}
+M.Solution = Solution
+
+return M
