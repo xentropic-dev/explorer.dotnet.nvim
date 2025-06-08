@@ -6,7 +6,7 @@ local M = {}
 local has_devicons, devicons = pcall(require, "nvim-web-devicons")
 
 --- Gets the appropriate icon for a node based on its type and name
----@param node dotnet_explorer.TreeNode The tree node
+---@param node TreeNode The tree node
 ---@return string|nil  icon The icon to display
 ---@return string|nil highlight The highlight group name
 local function get_icon(node)
@@ -46,7 +46,7 @@ end
 
 -- Renders a tree directly to a buffer with colored icons
 ---@param buf_id number The buffer ID to render to
----@param tree dotnet_explorer.TreeNode The tree to render
+---@param tree TreeNode The tree to render
 ---@param opts? table Optional configuration { namespace_id?: number, clear_buffer?: boolean, window_width?: number }
 ---@return number namespace_id The namespace ID used for highlights
 function M.render_tree(buf_id, tree, opts)
@@ -59,7 +59,7 @@ function M.render_tree(buf_id, tree, opts)
   local highlights = {}
 
   --- Recursive function to build lines and highlight data
-  ---@param node dotnet_explorer.TreeNode
+  ---@param node TreeNode
   local function build_node(node, indent)
     local icon, hl_group = get_icon(node)
     if not icon then
@@ -121,7 +121,7 @@ function M.render_tree(buf_id, tree, opts)
     })
 
     if is_open then
-      -- Sort children by name
+      -- Sort chidren by name
       local sorted_children = {}
       for _, child in ipairs(node.children) do
         table.insert(sorted_children, child)

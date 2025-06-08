@@ -156,8 +156,8 @@ local guid_to_type = {
 }
 
 -- Convert GUID to project type
--- @param guid string The project type GUID (case-insensitive)
--- @return string|nil The project type name, or nil if not found
+---@param guid string The project type GUID (case-insensitive)
+---@return string|nil The project type name, or nil if not found
 function M.guid_to_type(guid)
   if not guid then
     return nil
@@ -169,9 +169,9 @@ function M.guid_to_type(guid)
 end
 
 -- Check if a GUID represents a specific project type
--- @param guid string The project type GUID
--- @param expected_type string The expected type from M.TYPES
--- @return boolean True if the GUID matches the expected type
+---@param guid string The project type GUID
+---@param expected_type string The expected type from M.TYPES
+---@return boolean True if the GUID matches the expected type
 function M.is_type(guid, expected_type)
   return M.guid_to_type(guid) == expected_type
 end

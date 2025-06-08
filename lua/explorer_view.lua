@@ -13,7 +13,7 @@ local ExplorerView = {}
 ExplorerView.__index = ExplorerView
 
 ---Creates a new ExplorerView
----@param config table Configuration options
+---@param config table|nil Configuration options
 ---@return ExplorerView
 function ExplorerView.new(config)
   local self = setmetatable({}, ExplorerView)
@@ -158,7 +158,7 @@ end
 local instance = nil
 
 ---Gets the singleton instance of ExplorerView
----@param config table Configuration options
+---@param config table|nil Configuration options
 ---@return ExplorerView
 local function get_instance(config)
   if not instance then
