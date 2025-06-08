@@ -1,3 +1,5 @@
+require("solution.solution")
+require("tree.node")
 local node_module = require("tree.node")
 local PROJECT_TYPES = require("solution").PROJECT_TYPES
 local NodeType = node_module.NodeType
@@ -6,6 +8,8 @@ local TreeNode = node_module.TreeNode
 local M = {}
 
 -- Helper function to get sorted keys
+---@param t table
+---@param sort_func function|nil
 local function get_sorted_keys(t, sort_func)
   local keys = {}
   for k in pairs(t) do
@@ -16,14 +20,18 @@ local function get_sorted_keys(t, sort_func)
 end
 
 -- Helper function to sort projects by name
+---@param guid_a string
+---@param guid_b string
+---@param projects_by_guid table
+---@return boolean
 local function sort_projects_by_name(guid_a, guid_b, projects_by_guid)
   local project_a = projects_by_guid[guid_a]
   local project_b = projects_by_guid[guid_b]
   return project_a.name < project_b.name
 end
 
----@param solution dotnet_explorer.Solution
----@return dotnet_explorer.TreeNode
+---@param solution Solution
+---@return TreeNode
 function M.build_tree(solution)
   -- Create root solution node
   local path = vim.fn.fnamemodify(solution.path, ":t")
@@ -107,7 +115,7 @@ function M.sort_tree_children(node)
   end
 end
 
----@param project_node dotnet_explorer.TreeNode
+---@param project_node TreeNode
 function M.populate_project_files(project_node)
   if not project_node.path then
     return
@@ -122,7 +130,7 @@ function M.populate_project_files(project_node)
   M.add_directory_contents(project_node, project_dir)
 end
 
----@param node dotnet_explorer.TreeNode
+---@param node TreeNode
 function M.nest_code_behind_files(node)
   if not node.children or #node.children == 0 then
     return
@@ -180,9 +188,7 @@ function M.nest_code_behind_files(node)
 
     local parent_node = child.parent
 
-    vim.notify("Removing child from parent node: " .. parent_node.name, vim.log.levels.DEBUG)
     if parent_node ~= nil then
-      vim.notify("Removing child from parent node: " .. parent_node.name, vim.log.levels.DEBUG)
       parent_node:remove_child(child)
     end
 
@@ -192,7 +198,7 @@ function M.nest_code_behind_files(node)
   end
 end
 
----@param parent_node dotnet_explorer.TreeNode
+---@param parent_node TreeNode
 ---@param dir_path string
 function M.add_directory_contents(parent_node, dir_path)
   -- Check if directory exists and is readable

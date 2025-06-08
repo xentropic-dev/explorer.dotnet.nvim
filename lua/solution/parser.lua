@@ -1,5 +1,6 @@
 -- require("solution.solution")
-local Solution = require("solution.solution")
+local Solution = require("solution.solution").Solution
+local SolutionHeader = require("solution.solution_header").SolutionHeader
 local M = {}
 
 local project_types = require("solution.project_types")
@@ -36,7 +37,7 @@ function M.parse_solution(filepath)
   return solution
 end
 
----@class dotnet_explorer.Project
+---@class Project
 ---@field type_guid string The project type GUID
 ---@field name string The project name
 ---@field path string The relative normalized path to the project file
@@ -51,7 +52,7 @@ Project.__index = Project
 ---@param name string The project name
 ---@param path string The relative normalized path to the project file
 ---@param guid string The unique project GUID
----@return dotnet_explorer.Project
+---@return Project
 function Project.new(type_guid, name, path, guid)
   local self = setmetatable({}, Project)
   self.type_guid = type_guid
@@ -63,20 +64,11 @@ function Project.new(type_guid, name, path, guid)
   return self
 end
 
----@class dotnet_explorer.SolutionHeader
----@fields visual_studio_version string|nil The Visual Studio version.
----@fields file_version string|nil The solution file format version.
----@fields minimum_visual_studio_version string|nil The minimum Visual Studio version required.
-
 --- Parses the solution header from the given lines.
 ---@param lines string[] The lines of the solution file.
----@return dotnet_explorer.SolutionHeader
+---@return SolutionHeader
 function M._parse_solution_header(lines)
-  local header = {
-    visual_studio_version = nil,
-    file_version = nil,
-    minimum_visual_studio_version = nil,
-  }
+  local header = SolutionHeader.new(nil, nil, nil)
   for _, line in ipairs(lines) do
     local min_vs_version = line:match("MinimumVisualStudioVersion = (.+)")
     if min_vs_version and not header.minimum_visual_studio_version then
@@ -104,7 +96,7 @@ end
 
 --- Parses project information from solution file lines
 ---@param lines string[] The lines of the solution file
----@return dotnet_explorer.Project[] Array of parsed projects
+---@return Project[] Array of parsed projects
 function M._parse_projects(lines)
   local projects = {}
 

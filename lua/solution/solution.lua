@@ -1,16 +1,14 @@
----@meta
-
 ---@class Solution
 ---@field path string The absolute path to the solution file
----@field header dotnet_explorer.SolutionHeader The parsed solution header information
----@field projects_by_guid table<string, dotnet_explorer.Project> A map of project GUIDs to Project objects
+---@field header SolutionHeader The parsed solution header information
+---@field projects_by_guid table<string, Project> A map of project GUIDs to Project objects
 ---@field nested_projects table<string, string> A map of child project GUIDs to their parent project GUIDs
 local Solution = {}
 Solution.__index = Solution
 
 --- Creates a new Solution instance
 ---@param path string The relative path to the solution file
----@param header dotnet_explorer.SolutionHeader|nil The parsed solution header information
+---@param header SolutionHeader|nil The parsed solution header information
 ---@return Solution
 function Solution.new(path, header)
   local self = setmetatable({}, Solution)
@@ -27,10 +25,15 @@ function Solution.new(path, header)
 end
 
 --- Adds a project to the solution
----@param project dotnet_explorer.Project The project to add
+---@param project Project The project to add
 function Solution:add_project(project)
   if not project or not project.guid then
     error("Invalid project: must have a valid GUID")
   end
   self.projects_by_guid[project.guid] = project
 end
+
+local M = {}
+M.Solution = Solution
+
+return M
