@@ -1,6 +1,6 @@
 -- require("solution.solution")
-local Solution = require("solution.solution")
-local SolutionHeader = require("solution.solution_header")
+local Solution = require("solution.solution").Solution
+local SolutionHeader = require("solution.solution_header").SolutionHeader
 local M = {}
 
 local project_types = require("solution.project_types")
