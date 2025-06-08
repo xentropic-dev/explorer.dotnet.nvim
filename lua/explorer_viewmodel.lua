@@ -1,6 +1,7 @@
 -- explorer_viewmodel.lua
 -- Represents the state of the tree and persists between buffer open/close
 require("tree.node")
+require("solution.solution")
 local solution_parser = require("solution").Parser
 local tree_builder = require("tree.builder")
 local node_module = require("tree.node")
@@ -188,6 +189,7 @@ function ExplorerViewModel:activate_node_at_line(line_number)
 end
 
 -- Create a singleton instance
+---@class ExplorerViewModel
 local instance = ExplorerViewModel.new()
 
 -- Add a getter for the tree property to make it more explicit

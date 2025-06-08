@@ -1,3 +1,5 @@
+require("solution.solution")
+require("tree.node")
 local node_module = require("tree.node")
 local PROJECT_TYPES = require("solution").PROJECT_TYPES
 local NodeType = node_module.NodeType
@@ -22,8 +24,8 @@ local function sort_projects_by_name(guid_a, guid_b, projects_by_guid)
   return project_a.name < project_b.name
 end
 
----@param solution dotnet_explorer.Solution
----@return dotnet_explorer.TreeNode
+---@param solution Solution
+---@return TreeNode
 function M.build_tree(solution)
   -- Create root solution node
   local path = vim.fn.fnamemodify(solution.path, ":t")
