@@ -4,7 +4,7 @@ on:
   - pull_request
 jobs:
   unit_tests:
-    name: unit tests
+    name: Lint and Test
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -30,15 +30,12 @@ jobs:
         with:
           neovim: true
           version: ${{ matrix.rev }}
-      - name: Install dependencies
-        run: |
-          luarocks install luacheck
       - name: Prepare
         run: |
           ${{ matrix.install-rg }}
           rg --version
-
           git clone --depth 1 https://github.com/nvim-lua/plenary.nvim ../plenary.nvim
+          luarocks install luacheck
       - name: Run tests
         run: |
           nvim --version
