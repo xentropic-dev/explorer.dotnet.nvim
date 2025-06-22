@@ -10,13 +10,15 @@
       <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-e0af68.svg?style=for-the-badge&logo=opensourceinitiative&logoColor=white" />
     </a>
     <a href="https://github.com/YOUR_USERNAME/Explorer.Dotnet.nvim/actions">
-      <img alt="CI" src="https://img.shields.io/github/actions/workflow/status/YOUR_USERNAME/Explorer.Dotnet.nvim/ci.yml?style=for-the-badge&label=CI&logo=github&color=9ece6a" />
+      <img alt="CI" src="https://img.shields.io/github/actions/workflow/status/xentropic-dev/Explorer.Dotnet.nvim/ci.yml?style=for-the-badge&label=CI&logo=github&color=9ece6a" />
     </a>
     <a href="https://github.com/YOUR_USERNAME/Explorer.Dotnet.nvim/stargazers">
-      <img alt="GitHub Stars" src="https://img.shields.io/github/stars/YOUR_USERNAME/Explorer.Dotnet.nvim?style=for-the-badge&color=7aa2f7&logo=github" />
+      <img alt="GitHub Stars" src="https://img.shields.io/github/stars/xentropic-dev/Explorer.Dotnet.nvim?style=for-the-badge&color=7aa2f7&logo=github" />
     </a>
   </p>
-</div># Neovim C# Development
+</div>
+
+# Neovim C# Development
 
 C# is a powerful language, and Neovim is a powerful editor. This project is
 part of a series of plugins that aim to bring the best of C# development to
