@@ -1,5 +1,5 @@
 <div align="center">
-  <h1><span style="color:#ff4499;">🧭 </span><span style="color:#00ffd2;">Explorer.Dotnet.nvim</span></h1>
+  <h1>🧭 Explorer.Dotnet.nvim</h1>
   <p>
     A Neovim plugin for C# development, providing a solution explorer and project
     management tools.
@@ -11,6 +11,7 @@
     <a href="https://github.com/xentropic-dev/Explorer.Dotnet.nvim/stargazers"><img alt="GitHub Stars" src="https://img.shields.io/github/stars/xentropic-dev/Explorer.Dotnet.nvim?style=for-the-badge&color=7aa2f7&logo=github" /></a>
   </p>
 </div>
+---
 
 # Neovim C# Development
 
