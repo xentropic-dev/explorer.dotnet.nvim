@@ -35,7 +35,7 @@ jobs:
           ${{ matrix.install-rg }}
           rg --version
           git clone --depth 1 https://github.com/nvim-lua/plenary.nvim ../plenary.nvim
-          sudo luarocks install luacheck --local luacheck
+          sudo luarocks install luacheck
       - name: Run tests
         run: |
           nvim --version
