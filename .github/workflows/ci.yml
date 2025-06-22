@@ -10,9 +10,9 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - ubuntu-22.04
+          - ubuntu-latest
           - macos-latest
-          - windows-2022
+          - windows-latest
         rev:
           - nightly
           - v0.9.5
