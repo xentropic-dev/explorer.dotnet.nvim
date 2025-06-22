@@ -1,3 +1,17 @@
+<div align="center">
+  <h1>🧭 Explorer.Dotnet.nvim</h1>
+  <p>
+    A Neovim plugin for C# development, providing a solution explorer and project
+    management tools.
+  </p>
+
+  <p>
+    <a href="https://opensource.org/licenses/MIT"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-e0af68.svg?style=for-the-badge&logo=opensourceinitiative&logoColor=white" /></a>
+    <a href="https://github.com/xentropic-dev/Explorer.Dotnet.nvim/actions"><img alt="CI" src="https://img.shields.io/github/actions/workflow/status/xentropic-dev/Explorer.Dotnet.nvim/ci.yml?style=for-the-badge&label=CI&logo=github&color=9ece6a" /></a>
+    <a href="https://github.com/xentropic-dev/Explorer.Dotnet.nvim/stargazers"><img alt="GitHub Stars" src="https://img.shields.io/github/stars/xentropic-dev/Explorer.Dotnet.nvim?style=for-the-badge&color=7aa2f7&logo=github" /></a>
+  </p>
+</div>
+
 # Neovim C# Development
 
 C# is a powerful language, and Neovim is a powerful editor. This project is
@@ -30,18 +44,18 @@ Here's the recommended way to setup this plugin with Lazy.
 
 ```lua
 return {
-  "xentropic-dev/nvim-dotnet-explorer",
-	config = function()
-		require("dotnet_explorer").setup({
-			renderer = {
-				width = 40,
-				side = "right",
-			},
-		})
-	end,
-	keys = {
-		{ "<leader>ee", "<cmd>ToggleSolutionExplorer<cr>", desc = "Toggle Solution Explorer" },
-	},
+  "xentropic-dev/explorer.dotnet.nvim",
+  config = function()
+    require("dotnet_explorer").setup({
+      renderer = {
+        width = 40,
+        side = "right",
+      },
+    })
+  end,
+  keys = {
+    { "<leader>ee", "<cmd>ToggleSolutionExplorer<cr>", desc = "Toggle Solution Explorer" },
+  },
 }
 
 ```
@@ -107,3 +121,4 @@ Tree view components:
   - [ ] create solution from template
   - [ ] create project from template
   - [ ] create file from template
+- [ ] support for new .NET slnx file format
