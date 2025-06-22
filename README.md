@@ -121,3 +121,4 @@ Tree view components:
   - [ ] create solution from template
   - [ ] create project from template
   - [ ] create file from template
+- [ ] support for new .NET slnx file format
