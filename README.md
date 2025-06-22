@@ -1,5 +1,5 @@
 <div align="center">
-  <h1><span color="#ff4499">🧭 </span><span color="#00ffd2">Explorer.Dotnet.nvim</span></h1>
+  <h1><span style="color:#ff4499;">🧭 </span><span style="color:#00ffd2;">Explorer.Dotnet.nvim</span></h1>
   <p>
     A Neovim plugin for C# development, providing a solution explorer and project
     management tools.
