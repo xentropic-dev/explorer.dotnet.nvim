@@ -19,11 +19,11 @@ jobs:
           - v0.10.0
         include:
           - os: ubuntu-latest
-            install-rg: sudo apt-get update && sudo apt-get install -y ripgrep luarocks
+            install-rg: sudo apt-get update && sudo apt-get install -y ripgrep lua5.3 lua5.3-dev luarocks
           - os: macos-latest
-            install-rg: brew update && brew install ripgrep luarocks
+            install-rg: brew update && brew install ripgrep lua@5.3 luarocks
           - os: windows-latest
-            install-rg: choco install ripgrep luarocks
+            install-rg: choco install ripgrep lua53 luarocks
     steps:
       - uses: actions/checkout@v4
       - uses: rhysd/action-setup-vim@v1
