@@ -1,3 +1,13 @@
+<div  align="center">
+  <h1>Explorer.Dotnet.nvim</h1>
+  <p>
+    A Neovim plugin for C# development, providing a solution explorer and project
+    management tools.
+  </p>
+</div>
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 # Neovim C# Development
 
 C# is a powerful language, and Neovim is a powerful editor. This project is
@@ -30,18 +40,18 @@ Here's the recommended way to setup this plugin with Lazy.
 
 ```lua
 return {
-  "xentropic-dev/nvim-dotnet-explorer",
-	config = function()
-		require("dotnet_explorer").setup({
-			renderer = {
-				width = 40,
-				side = "right",
-			},
-		})
-	end,
-	keys = {
-		{ "<leader>ee", "<cmd>ToggleSolutionExplorer<cr>", desc = "Toggle Solution Explorer" },
-	},
+  "xentropic-dev/explorer.dotnet.nvim",
+  config = function()
+    require("dotnet_explorer").setup({
+      renderer = {
+        width = 40,
+        side = "right",
+      },
+    })
+  end,
+  keys = {
+    { "<leader>ee", "<cmd>ToggleSolutionExplorer<cr>", desc = "Toggle Solution Explorer" },
+  },
 }
 
 ```
