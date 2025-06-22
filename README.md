@@ -11,7 +11,6 @@
     <a href="https://github.com/xentropic-dev/Explorer.Dotnet.nvim/stargazers"><img alt="GitHub Stars" src="https://img.shields.io/github/stars/xentropic-dev/Explorer.Dotnet.nvim?style=for-the-badge&color=7aa2f7&logo=github" /></a>
   </p>
 </div>
----
 
 # Neovim C# Development
 
