@@ -19,11 +19,11 @@ jobs:
           - v0.10.0
         include:
           - os: ubuntu-latest
-            install-rg: sudo apt-get update && sudo apt-get install -y ripgrep lua5.3 lua5.3-dev luarocks
+            install-rg: sudo apt-get update && sudo apt-get install -y ripgrep luarocks
           - os: macos-latest
-            install-rg: brew update && brew install ripgrep lua@5.3 luarocks
+            install-rg: brew update && brew install ripgrep luarocks
           - os: windows-latest
-            install-rg: choco install ripgrep lua53 luarocks
+            install-rg: choco install ripgrep luarocks
     steps:
       - uses: actions/checkout@v4
       - uses: rhysd/action-setup-vim@v1
@@ -35,7 +35,7 @@ jobs:
           ${{ matrix.install-rg }}
           rg --version
           git clone --depth 1 https://github.com/nvim-lua/plenary.nvim ../plenary.nvim
-          luarocks install luacheck --local luacheck
+          sudo luarocks install luacheck --local luacheck
       - name: Run tests
         run: |
           nvim --version
