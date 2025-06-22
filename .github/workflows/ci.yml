@@ -18,11 +18,11 @@ jobs:
           - v0.9.5
           - v0.10.0
         include:
-          - os: ubuntu-22.04
+          - os: ubuntu-latest
             install-rg: sudo apt-get update && sudo apt-get install -y ripgrep luarocks
           - os: macos-latest
             install-rg: brew update && brew install ripgrep luarocks
-          - os: windows-2022
+          - os: windows-latest
             install-rg: choco install ripgrep luarocks
     steps:
       - uses: actions/checkout@v4
